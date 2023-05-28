@@ -5,4 +5,6 @@ public record GetDishQueryResult(
     string Name,
     string Description,
     decimal Price,
-    int Quantity);
+    int Quantity,
+    DateTime CreatedAt,
+    DateTime UpdatedAt);

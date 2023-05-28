@@ -4,37 +4,39 @@ using RestaurantHomework.OrdersServer.Dal.Repositories.Interfaces;
 
 namespace RestaurantHomework.OrdersServer.Bll.Commands;
 
-public record CreateDishCommand(
+public record UpdateDishCommand(
+    int Id,
     string Name,
     string Description,
     decimal Price,
     int Quantity) : IRequest<Unit>;
 
-public class CreateDishCommandHandler : IRequestHandler<CreateDishCommand, Unit>
+public class UpdateDishCommandHandler : IRequestHandler<UpdateDishCommand, Unit>
 {
     private readonly IDishesRepository _dishesRepository;
 
-    public CreateDishCommandHandler(IDishesRepository dishesRepository)
+    public UpdateDishCommandHandler(IDishesRepository dishesRepository)
     {
         _dishesRepository = dishesRepository;
     }
 
-    public async Task<Unit> Handle(CreateDishCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
     {
         var dish = new DishEntity
         {
-            Name = request.Name,
+            Id = request.Id,
             Description = request.Description,
+            Name = request.Name,
             Price = request.Price,
             Quantity = request.Quantity
         };
 
         using var transaction = _dishesRepository.CreateTransactionScope();
         
-        await _dishesRepository.Add(dish, cancellationToken);
+        await _dishesRepository.Update(dish, cancellationToken);
         
         transaction.Complete();
-
+        
         return Unit.Value;
     }
 }

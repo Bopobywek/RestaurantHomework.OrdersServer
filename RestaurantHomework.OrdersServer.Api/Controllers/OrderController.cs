@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantHomework.OrdersServer.Api.Requests;
 using RestaurantHomework.OrdersServer.Api.Responses;
@@ -10,6 +11,7 @@ namespace RestaurantHomework.OrdersServer.Api.Controllers;
 
 [ApiController]
 [Route("orders")]
+[Authorize(Roles = "customer,manager,chef")]
 public class OrderController
 {
     private readonly IMediator _mediator;

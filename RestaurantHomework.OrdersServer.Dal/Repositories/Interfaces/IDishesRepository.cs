@@ -3,7 +3,7 @@ using RestaurantHomework.OrdersServer.Dal.Models;
 
 namespace RestaurantHomework.OrdersServer.Dal.Repositories.Interfaces;
 
-public interface IDishesRepository
+public interface IDishesRepository : IDbRepository
 {
     Task Add(DishEntity dish, CancellationToken cancellationToken);
     Task<List<DishEntity>> Query(DishesQueryModel model, CancellationToken cancellationToken);

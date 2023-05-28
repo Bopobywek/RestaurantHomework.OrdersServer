@@ -2,8 +2,8 @@
 
 namespace RestaurantHomework.OrdersServer.Dal.Repositories.Interfaces;
 
-public interface IOrdersRepository
+public interface IOrdersRepository : IDbRepository
 {
     Task Add(OrderEntity order, CancellationToken cancellationToken);
-    Task<OrderEntity> Query(int orderId, CancellationToken cancellationToken);
+    Task<OrderEntity?> Query(int orderId, CancellationToken cancellationToken);
 }

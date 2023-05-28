@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantHomework.OrdersServer.Api.Requests;
 using RestaurantHomework.OrdersServer.Api.Responses;
@@ -9,6 +10,7 @@ namespace RestaurantHomework.OrdersServer.Api.Controllers;
 
 [ApiController]
 [Route("dishes")]
+[Authorize(Roles = "manager")]
 public class DishController
 {
     private readonly IMediator _mediator;
@@ -41,7 +43,9 @@ public class DishController
             result.Name,
             result.Description,
             result.Price,
-            result.Quantity);
+            result.Quantity,
+            result.CreatedAt,
+            result.UpdatedAt);
     }
     
     [HttpGet]
@@ -50,7 +54,13 @@ public class DishController
     }
     
     [HttpPut("{id}")]
-    public void UpdateDish(int id)
+    public async Task PutDish(int id, UpdateDishRequest request)
+    {
+        // TODO: PutDishRequestValidator
+    }
+    
+    [HttpPatch("{id}")]
+    public async Task PatchDish(int id, UpdateDishRequest request)
     {
     }
     

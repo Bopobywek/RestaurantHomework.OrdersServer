@@ -16,6 +16,8 @@ public static class Postgres
     {
         var mapper = NpgsqlConnection.GlobalTypeMapper;
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+        
+        mapper.MapComposite<DishEntity>("dishes_v1", Translator);
     }
 
     public static void AddMigrations(IServiceCollection services)

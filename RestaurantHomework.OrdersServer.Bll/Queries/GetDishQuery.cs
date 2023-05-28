@@ -23,6 +23,8 @@ public class GetDishQueryHandler : IRequestHandler<GetDishQuery, GetDishQueryRes
             dish.Name,
             dish.Description,
             dish.Price,
-            dish.Quantity);
+            dish.Quantity,
+            dish.CreatedAt,
+            dish.UpdatedAt);
     }
 }

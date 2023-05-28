@@ -16,7 +16,10 @@ public class DeleteDishCommandHandler : IRequestHandler<DeleteDishCommand, Unit>
 
     public async Task<Unit> Handle(DeleteDishCommand request, CancellationToken cancellationToken)
     {
+        using var transaction = _dishesRepository.CreateTransactionScope();
         await _dishesRepository.Delete(request.DishId, cancellationToken);
+        transaction.Complete();
+        
         return Unit.Value;
     }
 }

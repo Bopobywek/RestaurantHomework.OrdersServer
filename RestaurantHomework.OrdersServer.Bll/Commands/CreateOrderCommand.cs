@@ -21,6 +21,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Uni
 
     public async Task<Unit> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
+        // TODO: УБРАТЬ СО СКЛАДА СООТВЕТСТВУЮЩЕЕ КОЛИЧЕСТВО ПРОДУКТОВ
         var order = new OrderEntity
         {
             UserId = request.UserId,
@@ -36,8 +37,12 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Uni
             SpecialRequests = request.SpecialRequests
         };
         
+        using var transaction = _ordersRepository.CreateTransactionScope();
+        
         await _ordersRepository.Add(order, cancellationToken);
-
+        
+        transaction.Complete();
+        
         return Unit.Value;
     }
 }

@@ -12,6 +12,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDalRepositories(
         this IServiceCollection services)
     {
+        services.AddScoped<IDishesRepository, DishesRepository>();
+        services.AddScoped<IOrdersRepository, OrdersRepository>();
         return services;
     }
     
@@ -20,7 +22,9 @@ public static class ServiceCollectionExtensions
         IConfigurationRoot config)
     {
         services.Configure<DalOptions>(config.GetSection(nameof(DalOptions)));
-
+        
+        Postgres.MapCompositeTypes();
+        
         Postgres.AddMigrations(services);
         
         return services;
