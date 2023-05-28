@@ -7,7 +7,7 @@ public interface IDishesRepository
 {
     Task Add(DishEntity dish, CancellationToken cancellationToken);
     Task<List<DishEntity>> Query(DishesQueryModel model, CancellationToken cancellationToken);
-    Task<DishEntity> Query(int id, CancellationToken cancellationToken);
+    Task<DishEntity?> Query(int id, CancellationToken cancellationToken);
     Task Update(DishEntity dish, CancellationToken cancellationToken);
     Task Delete(int dishId, CancellationToken cancellationToken);
 }
