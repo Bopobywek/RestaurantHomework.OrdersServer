@@ -16,6 +16,7 @@ namespace RestaurantHomework.OrdersServer.Api.Controllers;
 [Route("/api/orders")]
 [Authorize(Roles = "customer,manager,chef")]
 [ValidationExceptionFilter]
+[ArgumentExceptionFilter]
 public class OrderController
 {
     private readonly IMediator _mediator;

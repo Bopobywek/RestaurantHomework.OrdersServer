@@ -49,7 +49,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int
         {
             if (!dishes.ContainsKey(dish.Id) || dishes[dish.Id].Quantity < dish.Quantity)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Заказ не может быть создан," +
+                                            " недостаточно продуктов для изготовления блюда");
             }
 
             dishes[dish.Id].Quantity -= dish.Quantity;

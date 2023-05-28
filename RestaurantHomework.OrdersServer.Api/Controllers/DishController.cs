@@ -15,6 +15,7 @@ namespace RestaurantHomework.OrdersServer.Api.Controllers;
 [Route("/api/dishes")]
 [Authorize(Roles = "manager")]
 [ValidationExceptionFilter]
+[ArgumentExceptionFilter]
 public class DishController
 {
     private readonly IMediator _mediator;
@@ -61,6 +62,11 @@ public class DishController
     [HttpGet]
     public async Task<GetDishesResponse> GetDishes([FromQuery] int take = 100, [FromQuery] int skip = 0)
     {
+        if (take < 0 || skip < 0)
+        {
+            throw new ValidationException("Параметры take и skip не могут быть меньше 0.");
+        }
+
         var command = new GetDishesQuery(take, skip);
         var result = await _mediator.Send(command);
 

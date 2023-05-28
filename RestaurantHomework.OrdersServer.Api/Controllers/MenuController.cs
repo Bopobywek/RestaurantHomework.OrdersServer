@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantHomework.OrdersServer.Api.ActionFilters;
@@ -11,6 +12,7 @@ namespace RestaurantHomework.OrdersServer.Api.Controllers;
 [Route("/api/menu")]
 [Authorize(Roles = "customer,manager,chef")]
 [ValidationExceptionFilter]
+[ArgumentExceptionFilter]
 public class MenuController
 {
     private readonly IMediator _mediator;
@@ -23,6 +25,11 @@ public class MenuController
     [HttpGet]
     public async Task<GetMenuResponse> GetMenu([FromQuery] int take = 100, [FromQuery] int skip = 0)
     {
+        if (take < 0 || skip < 0)
+        {
+            throw new ValidationException("Параметры take и skip не могут быть меньше 0.");
+        }
+        
         var command = new GetMenuQuery(take, skip);
         var result = await _mediator.Send(command);
 
