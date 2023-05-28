@@ -2,7 +2,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RestaurantHomework.OrdersServer.BackgroundServices.Extensions;
 using RestaurantHomework.OrdersServer.Bll.Extensions;
+using RestaurantHomework.OrdersServer.Bll.Options;
 using RestaurantHomework.OrdersServer.Dal.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
-        Description = "Please insert JWT with Bearer into field",
+        Description = "Please insert JWT with Bearer into field. Example: \"Bearer &lt;token&gt;\"",
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
@@ -39,6 +41,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services
     .AddBll(builder.Configuration)
+    .AddBackgroundServices(builder.Configuration)
     .AddDalInfrastructure(builder.Configuration)
     .AddDalRepositories();
 
@@ -48,21 +51,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // указывает, будет ли валидироваться издатель при валидации токена
-            ValidateIssuer = false,
-            // строка, представляющая издателя
-            // ValidIssuer = AuthOptions.ISSUER,
-            // будет ли валидироваться потребитель токена
-            ValidateAudience = false,
-            // установка потребителя токена
-            // ValidAudience = AuthOptions.AUDIENCE,
-            // будет ли валидироваться время существования
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JwtOptions:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JwtOptions:Audience"],
             ValidateLifetime = true,
-            // установка ключа безопасности
+            LifetimeValidator = (notBefore, expires, _, _) => notBefore <= DateTime.UtcNow &&
+                                                                                             expires > DateTime.UtcNow,
             IssuerSigningKey =
                 new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("Idet_medved'_po_lesu,_vidit,_mashina_gorit._Sel_v_nee_i_sgorel")),
-            // валидация ключа безопасности
+                    Encoding.ASCII.GetBytes(builder.Configuration["JwtOptions:Secret"]!)),
             ValidateIssuerSigningKey = true,
         };
     });
@@ -75,6 +73,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseRouting();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

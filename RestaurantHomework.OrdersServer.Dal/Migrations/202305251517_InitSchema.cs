@@ -12,7 +12,6 @@ public class InitSchema : Migration {
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     quantity INT NOT NULL,
-    is_available BOOLEAN NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

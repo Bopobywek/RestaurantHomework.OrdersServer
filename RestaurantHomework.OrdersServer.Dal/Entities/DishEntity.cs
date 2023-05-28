@@ -14,5 +14,4 @@ public class DishEntity
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public bool IsAvailable => Quantity > 0;
 }

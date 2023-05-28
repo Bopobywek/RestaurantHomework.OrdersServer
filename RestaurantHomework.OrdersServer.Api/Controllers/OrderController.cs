@@ -1,8 +1,11 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantHomework.OrdersServer.Api.ActionFilters;
 using RestaurantHomework.OrdersServer.Api.Requests;
 using RestaurantHomework.OrdersServer.Api.Responses;
+using RestaurantHomework.OrdersServer.Api.Validators;
 using RestaurantHomework.OrdersServer.Bll.Commands;
 using RestaurantHomework.OrdersServer.Bll.Models;
 using RestaurantHomework.OrdersServer.Bll.Queries;
@@ -10,8 +13,9 @@ using RestaurantHomework.OrdersServer.Bll.Queries;
 namespace RestaurantHomework.OrdersServer.Api.Controllers;
 
 [ApiController]
-[Route("orders")]
+[Route("/api/orders")]
 [Authorize(Roles = "customer,manager,chef")]
+[ValidationExceptionFilter]
 public class OrderController
 {
     private readonly IMediator _mediator;
@@ -22,8 +26,11 @@ public class OrderController
     }
 
     [HttpPost]
-    public async Task CreateOrder(CreateOrderRequest request)
+    public async Task<CreateOrderResponse> CreateOrder(CreateOrderRequest request)
     {
+        var validator = new CreateOrderRequestValidator();
+        await validator.ValidateAndThrowAsync(request);
+        
         var command = new CreateOrderCommand(
             request.UserId,
             request.Dishes
@@ -35,12 +42,17 @@ public class OrderController
                 .ToArray(),
             request.SpecialRequests);
 
-        await _mediator.Send(command);
+        var id = await _mediator.Send(command);
+
+        return new CreateOrderResponse(id);
     }
 
     [HttpGet("{id}")]
     public async Task<GetOrderInfoResponse> GetOrderInfo(int id)
     {
+        var validator = new IdValidator();
+        await validator.ValidateAndThrowAsync(id);
+        
         var command = new GetOrderQuery(id);
         var result = await _mediator.Send(command);
 
@@ -52,7 +64,7 @@ public class OrderController
                     x => new DishInfoResponse(
                         x.Id,
                         x.Name,
-                        x.Quantity)
+                        x.Description)
                 )
                 .ToArray(),
             result.SpecialRequests);

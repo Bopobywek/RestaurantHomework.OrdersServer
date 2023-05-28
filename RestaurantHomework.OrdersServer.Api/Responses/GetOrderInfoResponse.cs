@@ -9,4 +9,4 @@ public record GetOrderInfoResponse(
 public record DishInfoResponse(
     int Id, 
     string Name,
-    int Quantity);
+    string Description);

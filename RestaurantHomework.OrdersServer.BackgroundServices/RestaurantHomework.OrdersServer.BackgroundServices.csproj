@@ -7,15 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Enums" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="MediatR" Version="12.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RestaurantHomework.OrdersServer.Dal\RestaurantHomework.OrdersServer.Dal.csproj" />
+      <ProjectReference Include="..\RestaurantHomework.OrdersServer.Bll\RestaurantHomework.OrdersServer.Bll.csproj" />
     </ItemGroup>
 
 </Project>

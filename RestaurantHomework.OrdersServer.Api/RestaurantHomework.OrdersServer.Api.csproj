@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\RestaurantHomework.OrdersServer.BackgroundServices\RestaurantHomework.OrdersServer.BackgroundServices.csproj" />
       <ProjectReference Include="..\RestaurantHomework.OrdersServer.Bll\RestaurantHomework.OrdersServer.Bll.csproj" />
     </ItemGroup>
 

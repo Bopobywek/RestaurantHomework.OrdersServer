@@ -13,10 +13,10 @@ public class DishesRepository : BaseRepository, IDishesRepository
     {
     }
 
-    public async Task Add(DishEntity dish, CancellationToken cancellationToken)
+    public async Task<int> Add(DishEntity dish, CancellationToken cancellationToken)
     {
-        const string sqlInsert = @"insert into dishes (name, description, price, quantity, is_available)
-values (@Name, @Description, @Price, @Quantity, @IsAvailable)";
+        const string sqlInsert = @"insert into dishes (name, description, price, quantity)
+values (@Name, @Description, @Price, @Quantity) returning id";
 
         var sqlInsertParams = new
         {
@@ -24,18 +24,19 @@ values (@Name, @Description, @Price, @Quantity, @IsAvailable)";
             dish.Description,
             dish.Price,
             dish.Quantity,
-            dish.IsAvailable
         };
 
         await using var connection = await GetAndOpenConnection();
-        await connection.ExecuteAsync(
+        var queryResult = await connection.QueryAsync<int>(
             new CommandDefinition(
                 sqlInsert,
                 sqlInsertParams,
                 cancellationToken: cancellationToken));
+
+        return queryResult.FirstOrDefault();
     }
 
-    public async Task<List<DishEntity>> Query(DishesQueryModel model, CancellationToken cancellationToken)
+    public async Task<DishEntity[]> Query(DishesQueryModel model, CancellationToken cancellationToken)
     {
         const string sqlQuery = @"
 select id,
@@ -43,7 +44,6 @@ select id,
        description,
        price,
        quantity,
-       is_available,
        created_at,
        updated_at
 from dishes
@@ -62,7 +62,34 @@ LIMIT @Limit OFFSET @Offset;";
                 sqlQueryParams,
                 cancellationToken: cancellationToken));
 
-        return result?.ToList() ?? new List<DishEntity>();
+        return result.ToArray();
+    }
+    public async Task<DishEntity[]> Query(int[] dishIds, CancellationToken cancellationToken)
+    {
+        const string sqlQuery = @"
+select id,
+       name,
+       description,
+       price,
+       quantity,
+       created_at,
+       updated_at
+from dishes
+where id = ANY(@Ids)";
+        
+        var sqlQueryParams = new
+        {
+            Ids = dishIds
+        };
+
+        await using var connection = await GetAndOpenConnection();
+        var result = await connection.QueryAsync<DishEntity>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: cancellationToken));
+
+        return result.ToArray();
     }
 
     public async Task<DishEntity?> Query(int id, CancellationToken cancellationToken)
@@ -99,8 +126,7 @@ where id = @Id";
                   name = @Name,
                   description = @Description,
                   price = @Price,
-                  Quantity = @Quantity,
-                  IsAvailable = @IsAvailable
+                  Quantity = @Quantity
               where id = @Id";
 
         var sqlUpdateParams = new
@@ -108,8 +134,7 @@ where id = @Id";
             dish.Name,
             dish.Description,
             dish.Price,
-            dish.Quantity,
-            dish.IsAvailable
+            dish.Quantity
         };
 
         await using var connection = await GetAndOpenConnection();

@@ -8,9 +8,9 @@ public record CreateDishCommand(
     string Name,
     string Description,
     decimal Price,
-    int Quantity) : IRequest<Unit>;
+    int Quantity) : IRequest<int>;
 
-public class CreateDishCommandHandler : IRequestHandler<CreateDishCommand, Unit>
+public class CreateDishCommandHandler : IRequestHandler<CreateDishCommand, int>
 {
     private readonly IDishesRepository _dishesRepository;
 
@@ -19,7 +19,7 @@ public class CreateDishCommandHandler : IRequestHandler<CreateDishCommand, Unit>
         _dishesRepository = dishesRepository;
     }
 
-    public async Task<Unit> Handle(CreateDishCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateDishCommand request, CancellationToken cancellationToken)
     {
         var dish = new DishEntity
         {
@@ -31,10 +31,10 @@ public class CreateDishCommandHandler : IRequestHandler<CreateDishCommand, Unit>
 
         using var transaction = _dishesRepository.CreateTransactionScope();
         
-        await _dishesRepository.Add(dish, cancellationToken);
+        var id = await _dishesRepository.Add(dish, cancellationToken);
         
         transaction.Complete();
 
-        return Unit.Value;
+        return id;
     }
 }

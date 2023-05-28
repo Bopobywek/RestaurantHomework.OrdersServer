@@ -17,7 +17,6 @@ DO $$
                 , description   text
                 , price         decimal(10, 2)
                 , quantity      int
-                , is_available  boolean
                 , created_at    timestamp
                 , updated_at    timestamp
             );

@@ -18,6 +18,10 @@ public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, GetOrderQuery
     public async Task<GetOrderQueryResult> Handle(GetOrderQuery request, CancellationToken cancellationToken)
     {
         var order = await _ordersRepository.Query(request.Id, cancellationToken);
+        if (order is null)
+        {
+            throw new ArgumentException("Такого заказа не существует");
+        }
 
         return new GetOrderQueryResult(
             order.Id,
@@ -27,7 +31,7 @@ public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, GetOrderQuery
                     x => new OrderQueryDishResult(
                         x.Id,
                         x.Name,
-                        x.Quantity)
+                        x.Description)
                 )
                 .ToArray(),
             order.SpecialRequests);

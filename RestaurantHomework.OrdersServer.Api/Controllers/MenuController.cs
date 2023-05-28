@@ -1,14 +1,16 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantHomework.OrdersServer.Api.ActionFilters;
 using RestaurantHomework.OrdersServer.Api.Responses;
 using RestaurantHomework.OrdersServer.Bll.Queries;
 
 namespace RestaurantHomework.OrdersServer.Api.Controllers;
 
 [ApiController]
-[Route("menu")]
+[Route("/api/menu")]
 [Authorize(Roles = "customer,manager,chef")]
+[ValidationExceptionFilter]
 public class MenuController
 {
     private readonly IMediator _mediator;

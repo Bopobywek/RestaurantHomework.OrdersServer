@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6954FFB2-272
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantHomework.OrdersServer.Dal", "RestaurantHomework.OrdersServer.Dal\RestaurantHomework.OrdersServer.Dal.csproj", "{956BD19C-66B4-4081-A559-FD2D730A8ABE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantHomework.OrdersServer.BackgroundServices", "RestaurantHomework.OrdersServer.BackgroundServices\RestaurantHomework.OrdersServer.BackgroundServices.csproj", "{8747CA79-A017-4390-8D58-5A2A2FB71C68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,10 +28,15 @@ Global
 		{956BD19C-66B4-4081-A559-FD2D730A8ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{956BD19C-66B4-4081-A559-FD2D730A8ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{956BD19C-66B4-4081-A559-FD2D730A8ABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8747CA79-A017-4390-8D58-5A2A2FB71C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8747CA79-A017-4390-8D58-5A2A2FB71C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8747CA79-A017-4390-8D58-5A2A2FB71C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8747CA79-A017-4390-8D58-5A2A2FB71C68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E9754F04-9BF6-4129-9B1B-82A04E7BA2D2} = {6954FFB2-2723-4BAD-96AF-A0F91E77E25F}
 		{7E6C01E0-ED59-4F8E-B74C-EEE9BF91B45A} = {6954FFB2-2723-4BAD-96AF-A0F91E77E25F}
 		{956BD19C-66B4-4081-A559-FD2D730A8ABE} = {6954FFB2-2723-4BAD-96AF-A0F91E77E25F}
+		{8747CA79-A017-4390-8D58-5A2A2FB71C68} = {6954FFB2-2723-4BAD-96AF-A0F91E77E25F}
 	EndGlobalSection
 EndGlobal

@@ -18,6 +18,11 @@ public class GetDishQueryHandler : IRequestHandler<GetDishQuery, GetDishQueryRes
     public async Task<GetDishQueryResult> Handle(GetDishQuery request, CancellationToken cancellationToken)
     {
         var dish = await _dishesRepository.Query(request.Id, cancellationToken);
+        if (dish is null)
+        {
+            throw new ArgumentException("Данного блюда не существует");
+        }
+
         return new GetDishQueryResult(
             dish.Id,
             dish.Name,

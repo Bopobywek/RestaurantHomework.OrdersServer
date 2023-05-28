@@ -9,4 +9,4 @@ public record GetOrderQueryResult(
 public record OrderQueryDishResult(
     int Id,
     string Name,
-    int Quantity);
+    string Description);
